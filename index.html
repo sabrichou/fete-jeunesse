@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>11 Février — Fête de la Jeunesse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --rouge: #E8002D;
+      --vert:  #009A44;
+      --jaune: #FECB00;
+      --noir:  #0A0A0A;
+      --blanc: #F5F0E8;
+      --gris:  #1A1A1A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--noir);
+      color: var(--blanc);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor {
+      width: 14px; height: 14px;
+      background: var(--jaune);
+      border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .15s ease, width .2s ease, height .2s ease, background .2s;
+      mix-blend-mode: exclusion;
+    }
+    body:hover #cursor { opacity: 1; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(254,203,0,.15);
+      animation: slideDown .6s ease forwards;
+    }
+    @keyframes slideDown { from{transform:translateY(-100%)} to{transform:translateY(0)} }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      color: var(--jaune);
+    }
+    .nav-logo span { color: var(--rouge); }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--blanc); text-decoration: none;
+      font-size: .85rem; font-weight: 500; letter-spacing: 1.5px;
+      text-transform: uppercase;
+      position: relative; transition: color .3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--jaune);
+      transition: width .3s;
+    }
+    .nav-links a:hover { color: var(--jaune); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      background: var(--noir);
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 20% 50%, rgba(232,0,45,.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 40%, rgba(0,154,68,.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 80%, rgba(254,203,0,.10) 0%, transparent 60%);
+    }
+
+    /* Animated flag stripes */
+    .flag-stripe {
+      position: absolute;
+      height: 100%; width: 6px;
+      opacity: .07;
+      animation: floatStripe 8s ease-in-out infinite;
+    }
+    .flag-stripe:nth-child(1) { left: 8%;  background: var(--vert);  animation-delay: 0s; }
+    .flag-stripe:nth-child(2) { left: 16%; background: var(--rouge); animation-delay: 1s; height: 60%; top: 20%; }
+    .flag-stripe:nth-child(3) { right: 8%; background: var(--vert);  animation-delay: 2s; }
+    .flag-stripe:nth-child(4) { right: 16%;background: var(--jaune); animation-delay: .5s; height: 70%; top: 10%; }
+    @keyframes floatStripe {
+      0%,100%{transform:scaleY(1) translateY(0)}
+      50%{transform:scaleY(.9) translateY(10px)}
+    }
+
+    /* Floating dots */
+    .dot {
+      position: absolute; border-radius: 50%;
+      animation: floatDot linear infinite;
+    }
+    @keyframes floatDot {
+      0%{transform:translateY(0) rotate(0)}
+      100%{transform:translateY(-100vh) rotate(360deg)}
+    }
+
+    .hero-content {
+      position: relative; text-align: center; padding: 0 1rem;
+      animation: fadeUp .8s ease .3s both;
+    }
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateY(40px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .hero-date {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      letter-spacing: 8px; text-transform: uppercase;
+      color: var(--jaune); margin-bottom: 1.2rem;
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
+    }
+    .hero-date::before, .hero-date::after {
+      content: ''; display: inline-block;
+      width: 50px; height: 2px; background: var(--jaune); opacity: .5;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 13vw, 10rem);
+      line-height: .9;
+      letter-spacing: -2px;
+    }
+    .hero-title .line1 { color: var(--blanc); display: block; }
+    .hero-title .line2 {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--vert);
+      display: block;
+    }
+    .hero-title .line3 { color: var(--rouge); display: block; }
+
+    .hero-sub {
+      font-size: clamp(.9rem, 1.8vw, 1.1rem);
+      color: rgba(245,240,232,.55);
+      margin-top: 1.8rem; max-width: 480px; margin-inline: auto;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: inline-flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+    }
+    .btn {
+      padding: .9rem 2.4rem;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: .85rem; letter-spacing: 2px; text-transform: uppercase;
+      text-decoration: none; border: none; cursor: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary {
+      background: var(--rouge); color: #fff;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(232,0,45,.4);
+    }
+    .btn-outline {
+      background: transparent; color: var(--jaune);
+      border: 2px solid var(--jaune);
+    }
+    .btn-outline:hover {
+      background: var(--jaune); color: var(--noir);
+      transform: translateY(-3px);
+    }
+
+    /* Countdown */
+    #countdown {
+      margin-top: 3.5rem;
+      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    }
+    .count-block {
+      text-align: center;
+    }
+    .count-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--jaune), var(--rouge));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .count-label {
+      font-size: .7rem; letter-spacing: 2px;
+      color: rgba(245,240,232,.4); text-transform: uppercase; margin-top: .2rem;
+    }
+    .count-sep {
+      font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+      color: var(--vert); opacity: .4; align-self: flex-start; margin-top: .3rem;
+    }
+
+    /* ── SCROLL LINE ── */
+    .scroll-line {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+    }
+    .scroll-line span {
+      font-size: .65rem; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(245,240,232,.3);
+    }
+    .scroll-bar {
+      width: 1px; height: 50px; background: rgba(254,203,0,.3);
+      position: relative; overflow: hidden;
+    }
+    .scroll-bar::after {
+      content: ''; position: absolute; top: -100%;
+      width: 100%; height: 100%; background: var(--jaune);
+      animation: scrollAnim 1.8s ease infinite;
+    }
+    @keyframes scrollAnim { 0%{top:-100%} 100%{top:100%} }
+
+    /* ── SECTION BASE ── */
+    section { padding: 7rem 2rem; }
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-eyebrow {
+      font-size: .75rem; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--vert); font-weight: 500; margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1; color: var(--blanc);
+    }
+    .section-title em { color: var(--jaune); font-style: normal; }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--gris);
+      position: relative; overflow: hidden;
+    }
+    #about::before {
+      content: '11'; position: absolute; right: -2rem; top: -3rem;
+      font-family: 'Bebas Neue', sans-serif; font-size: 30vw;
+      color: rgba(254,203,0,.03); line-height: 1; pointer-events: none;
+    }
+
+    .about-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center;
+    }
+    .about-text h3 {
+      font-family: 'Syne', sans-serif; font-size: 1.6rem;
+      color: var(--jaune); margin-bottom: 1.2rem;
+    }
+    .about-text p {
+      color: rgba(245,240,232,.65); line-height: 1.85; font-size: .95rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    .stat-card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(254,203,0,.1);
+      padding: 1.8rem 1.5rem;
+      position: relative; overflow: hidden;
+      transition: border-color .3s, transform .3s;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+    }
+    .stat-card:nth-child(1)::before { background: var(--rouge); }
+    .stat-card:nth-child(2)::before { background: var(--vert); }
+    .stat-card:nth-child(3)::before { background: var(--jaune); }
+    .stat-card:nth-child(4)::before { background: var(--rouge); }
+    .stat-card:hover { border-color: rgba(254,203,0,.35); transform: translateY(-4px); }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; line-height: 1; color: var(--blanc);
+    }
+    .stat-label { font-size: .8rem; color: rgba(245,240,232,.4); letter-spacing: 1px; margin-top: .3rem; }
+
+    /* ── ACTIVITÉS ── */
+    #activites { background: var(--noir); }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .filter-btn {
+      padding: .5rem 1.4rem;
+      border: 1px solid rgba(245,240,232,.15);
+      background: transparent; color: rgba(245,240,232,.5);
+      font-family: 'Inter', sans-serif; font-size: .8rem;
+      letter-spacing: 1px; text-transform: uppercase; cursor: none;
+      transition: all .25s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--jaune); color: var(--noir);
+      border-color: var(--jaune); font-weight: 700;
+    }
+
+    .activities-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .activity-card {
+      position: relative; overflow: hidden;
+      background: var(--gris);
+      border: 1px solid rgba(255,255,255,.05);
+      transition: transform .3s, border-color .3s;
+      animation: fadeUp .5s ease both;
+    }
+    .activity-card:hover { transform: translateY(-6px); border-color: rgba(254,203,0,.25); }
+    .activity-card:hover .card-overlay { opacity: 1; }
+    .activity-card:hover .card-icon-wrap { transform: scale(1.1) rotate(-5deg); }
+
+    .card-top {
+      height: 200px; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .card-bg-pattern {
+      position: absolute; inset: 0;
+      opacity: .12;
+    }
+    .card-icon-wrap {
+      font-size: 4rem; position: relative; z-index: 1;
+      transition: transform .3s;
+    }
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(232,0,45,.6), rgba(0,0,0,.4));
+      opacity: 0; transition: opacity .3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-overlay-text {
+      color: #fff; font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: .8rem; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .card-body { padding: 1.5rem; }
+    .card-category {
+      font-size: .65rem; letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: .6rem; font-weight: 500;
+    }
+    .card-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 1.1rem; color: var(--blanc); margin-bottom: .7rem;
+    }
+    .card-desc {
+      font-size: .82rem; color: rgba(245,240,232,.5); line-height: 1.65;
+    }
+    .card-tag {
+      display: inline-block; margin-top: .8rem;
+      padding: .3rem .8rem; font-size: .65rem;
+      letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+    }
+
+    /* hidden when filtered out */
+    .activity-card.hidden { display: none; }
+
+    /* ── PROGRAMME ── */
+    #programme {
+      background: var(--gris);
+    }
+    .timeline {
+      max-width: 800px; margin: 0 auto;
+      position: relative;
+    }
+    .timeline::before {
+      content: ''; position: absolute; left: 50%;
+      transform: translateX(-50%);
+      top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(to bottom, var(--rouge), var(--vert), var(--jaune));
+      opacity: .3;
+    }
+
+    .timeline-item {
+      display: flex; gap: 2rem; margin-bottom: 3rem;
+      position: relative;
+    }
+    .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+
+    .tl-time {
+      flex: 1; text-align: right;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem; color: var(--jaune);
+      padding-top: .3rem; line-height: 1;
+    }
+    .timeline-item:nth-child(even) .tl-time { text-align: left; }
+
+    .tl-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      flex-shrink: 0; margin-top: .5rem;
+      position: relative; z-index: 1;
+      border: 2px solid;
+    }
+    .tl-dot.rouge { background: var(--rouge); border-color: var(--rouge); box-shadow: 0 0 12px rgba(232,0,45,.5); }
+    .tl-dot.vert  { background: var(--vert);  border-color: var(--vert);  box-shadow: 0 0 12px rgba(0,154,68,.5); }
+    .tl-dot.jaune { background: var(--jaune); border-color: var(--jaune); box-shadow: 0 0 12px rgba(254,203,0,.5); }
+
+    .tl-content {
+      flex: 1;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      padding: 1.4rem 1.6rem;
+      transition: border-color .3s;
+    }
+    .tl-content:hover { border-color: rgba(254,203,0,.2); }
+    .tl-content h4 {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 1rem; color: var(--blanc); margin-bottom: .4rem;
+    }
+    .tl-content p { font-size: .82rem; color: rgba(245,240,232,.45); line-height: 1.6; }
+
+    /* ── GALERIE ── */
+    #galerie { background: var(--noir); }
+    .gallery-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(3, 160px);
+      gap: 1rem;
+    }
+    .gallery-item {
+      position: relative; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.05);
+    }
+    .gallery-item:nth-child(1) { grid-column: span 3; grid-row: span 2; }
+    .gallery-item:nth-child(2) { grid-column: span 2; }
+    .gallery-item:nth-child(3) { grid-column: span 1; }
+    .gallery-item:nth-child(4) { grid-column: span 1; }
+    .gallery-item:nth-child(5) { grid-column: span 2; }
+    .gallery-item:nth-child(6) { grid-column: span 3; }
+
+    .gallery-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      transition: transform .4s;
+    }
+    .gallery-item:hover .gallery-bg { transform: scale(1.08); }
+    .gallery-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,.8));
+      padding: 1.5rem 1rem .8rem;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: .8rem; color: var(--blanc);
+      transform: translateY(100%); transition: transform .3s;
+    }
+    .gallery-item:hover .gallery-caption { transform: translateY(0); }
+
+    /* ── INSCRIPTION ── */
+    #inscription {
+      background: linear-gradient(135deg, var(--gris) 0%, #0f0f0f 100%);
+    }
+    .form-wrap {
+      max-width: 700px; margin: 0 auto;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(254,203,0,.12);
+      padding: 3rem;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: .5rem; }
+    .form-group.full { grid-column: span 2; }
+    .form-group label {
+      font-size: .75rem; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(245,240,232,.4); font-weight: 500;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      color: var(--blanc);
+      padding: .85rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: .9rem;
+      outline: none; transition: border-color .25s;
+      cursor: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--jaune); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-group select option { background: var(--gris); }
+
+    .submit-btn {
+      margin-top: 1.8rem; width: 100%; padding: 1.1rem;
+      background: var(--rouge); color: #fff; border: none;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: .9rem; letter-spacing: 3px; text-transform: uppercase;
+      cursor: none; transition: all .25s; position: relative; overflow: hidden;
+    }
+    .submit-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--jaune), var(--rouge));
+      opacity: 0; transition: opacity .25s;
+    }
+    .submit-btn:hover::before { opacity: 1; }
+    .submit-btn span { position: relative; z-index: 1; }
+    .submit-btn:hover { box-shadow: 0 8px 30px rgba(232,0,45,.4); transform: translateY(-2px); }
+
+    #form-success {
+      display: none; text-align: center; padding: 2rem;
+    }
+    #form-success .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+    #form-success h3 {
+      font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--vert);
+      margin-bottom: .5rem;
+    }
+    #form-success p { color: rgba(245,240,232,.5); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #050505;
+      border-top: 1px solid rgba(254,203,0,.1);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .footer-flag {
+      display: flex; justify-content: center; margin-bottom: 1.5rem;
+    }
+    .flag-bar { height: 5px; width: 60px; }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+      letter-spacing: 4px; color: var(--blanc); margin-bottom: .5rem;
+    }
+    .footer-copy { font-size: .75rem; color: rgba(245,240,232,.2); letter-spacing: 1px; }
+
+    /* ── UTILITY ── */
+    .container { max-width: 1100px; margin: 0 auto; }
+    .text-rouge { color: var(--rouge); }
+    .text-vert  { color: var(--vert); }
+    .text-jaune { color: var(--jaune); }
+
+    /* Reveal animation */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      .gallery-item { grid-column: span 1 !important; grid-row: span 1 !important; height: 160px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: span 1; }
+      .timeline::before { left: 1.2rem; }
+      .timeline-item { flex-direction: column !important; padding-left: 3rem; }
+      .tl-time { text-align: left !important; }
+      .tl-dot { position: absolute; left: .5rem; top: .5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">11 <span>Fév</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#activites">Activités</a></li>
+      <li><a href="#programme">Programme</a></li>
+      <li><a href="#galerie">Galerie</a></li>
+      <li><a href="#inscription">Inscription</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="flag-stripe"></div>
+    <div class="flag-stripe"></div>
+    <div class="flag-stripe"></div>
+    <div class="flag-stripe"></div>
+
+    <div class="hero-content">
+      <div class="hero-date">11 Février 2026</div>
+      <h1 class="hero-title">
+        <span class="line1">Fête de</span>
+        <span class="line2">la</span>
+        <span class="line3">Jeunesse</span>
+      </h1>
+      <p class="hero-sub">
+        Célébrons ensemble l'avenir de notre nation. Une journée dédiée à la passion, à la créativité et à l'énergie de la jeunesse.
+      </p>
+      <div class="hero-cta">
+        <a href="#activites" class="btn btn-primary">Découvrir les activités</a>
+        <a href="#inscription" class="btn btn-outline">S'inscrire</a>
+      </div>
+      <div id="countdown">
+        <div class="count-block">
+          <div class="count-num" id="cd-jours">000</div>
+          <div class="count-label">Jours</div>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-block">
+          <div class="count-num" id="cd-heures">00</div>
+          <div class="count-label">Heures</div>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-block">
+          <div class="count-num" id="cd-minutes">00</div>
+          <div class="count-label">Minutes</div>
+        </div>
+        <div class="count-sep">:</div>
+        <div class="count-block">
+          <div class="count-num" id="cd-secondes">00</div>
+          <div class="count-label">Secondes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-line">
+      <div class="scroll-bar"></div>
+      <span>Défiler</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <div class="section-eyebrow">À propos de la journée</div>
+          <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.5rem);line-height:1;margin-bottom:1.5rem;">
+            Une célébration <em style="color:var(--jaune)">nationale</em><br>pour tous
+          </h2>
+          <p>Le 11 Février est une date emblématique dédiée à la célébration de la jeunesse camerounaise. Instaurée comme journée nationale, elle rassemble chaque année des milliers de jeunes issus de toutes les régions du pays.</p>
+          <p>À travers des compétitions sportives, des concours culturels, des expositions artistiques et des activités éducatives, cette journée valorise le talent, l'engagement civique et le dynamisme de la nouvelle génération.</p>
+          <p>C'est l'occasion de promouvoir l'unité nationale, de récompenser l'excellence juvénile et de tracer ensemble les contours d'un avenir prometteur.</p>
+        </div>
+        <div class="about-stats reveal">
+          <div class="stat-card">
+            <div class="stat-num">50+</div>
+            <div class="stat-label">Années de célébration</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">10</div>
+            <div class="stat-label">Régions participantes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">100k</div>
+            <div class="stat-label">Jeunes mobilisés</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">30+</div>
+            <div class="stat-label">Activités organisées</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITÉS -->
+  <section id="activites">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Que faire le 11 Février</div>
+      <h2 class="section-title">Les <em>Activités</em></h2>
+    </div>
+
+    <div class="filter-tabs reveal">
+      <button class="filter-btn active" data-filter="all">Tous</button>
+      <button class="filter-btn" data-filter="sport">Sport</button>
+      <button class="filter-btn" data-filter="culture">Culture</button>
+      <button class="filter-btn" data-filter="art">Art</button>
+      <button class="filter-btn" data-filter="education">Éducation</button>
+      <button class="filter-btn" data-filter="social">Social</button>
+    </div>
+
+    <div class="activities-grid" id="activities-grid">
+
+      <!-- Sport -->
+      <div class="activity-card" data-category="sport">
+        <div class="card-top" style="background:linear-gradient(135deg,#1a0000,#2d0000)">
+          <div class="card-bg-pattern" style="background:repeating-linear-gradient(45deg,var(--rouge) 0,var(--rouge) 1px,transparent 0,transparent 50%) 0/10px 10px;"></div>
+          <div class="card-icon-wrap">⚽</div>
+          <div class="card-overlay"><span class="card-overlay-text">Participer →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-rouge">Sport</div>
+          <div class="card-title">Tournoi de Football</div>
+          <div class="card-desc">Compétitions inter-lycées et universités. Matchs de groupes, demi-finales et grande finale sous les regards de milliers de supporters.</div>
+          <span class="card-tag" style="background:rgba(232,0,45,.15);color:var(--rouge);">Inter-Établissements</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="sport">
+        <div class="card-top" style="background:linear-gradient(135deg,#001a00,#002d00)">
+          <div class="card-bg-pattern" style="background:radial-gradient(var(--vert) 1px,transparent 1px) 0/12px 12px;"></div>
+          <div class="card-icon-wrap">🏃</div>
+          <div class="card-overlay"><span class="card-overlay-text">Participer →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-vert">Sport</div>
+          <div class="card-title">Course & Athlétisme</div>
+          <div class="card-desc">100m, 400m, relais, saut en longueur et hauteur. Les champions régionaux s'affrontent pour représenter leur localité.</div>
+          <span class="card-tag" style="background:rgba(0,154,68,.15);color:var(--vert);">Stade Municipal</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="sport">
+        <div class="card-top" style="background:linear-gradient(135deg,#1a1300,#2d2200)">
+          <div class="card-bg-pattern" style="background:linear-gradient(0deg,transparent 49%,rgba(254,203,0,.15) 50%) 0/20px 20px;"></div>
+          <div class="card-icon-wrap">🏀</div>
+          <div class="card-overlay"><span class="card-overlay-text">Participer →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-jaune">Sport</div>
+          <div class="card-title">Basketball & Handball</div>
+          <div class="card-desc">Tournois mixtes et séparés. Ambiance électrique dans les gymnases pour des matchs palpitants tout au long de la journée.</div>
+          <span class="card-tag" style="background:rgba(254,203,0,.15);color:var(--jaune);">Gymnase Central</span>
+        </div>
+      </div>
+
+      <!-- Culture -->
+      <div class="activity-card" data-category="culture">
+        <div class="card-top" style="background:linear-gradient(135deg,#0a001a,#15002d)">
+          <div class="card-bg-pattern" style="background:repeating-linear-gradient(90deg,rgba(150,50,255,.1) 0,rgba(150,50,255,.1) 1px,transparent 0,transparent 20px);"></div>
+          <div class="card-icon-wrap">🎭</div>
+          <div class="card-overlay"><span class="card-overlay-text">Découvrir →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-rouge">Culture</div>
+          <div class="card-title">Défilé Culturel</div>
+          <div class="card-desc">Représentation des tenues traditionnelles de toutes les régions du Cameroun. Un voyage coloré à travers l'identité culturelle nationale.</div>
+          <span class="card-tag" style="background:rgba(232,0,45,.15);color:var(--rouge);">Place Centrale</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="culture">
+        <div class="card-top" style="background:linear-gradient(135deg,#00101a,#001a2d)">
+          <div class="card-bg-pattern" style="background:radial-gradient(rgba(0,154,68,.2) 2px,transparent 2px) 0/15px 15px;"></div>
+          <div class="card-icon-wrap">🥁</div>
+          <div class="card-overlay"><span class="card-overlay-text">Écouter →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-vert">Culture</div>
+          <div class="card-title">Musique Traditionnelle</div>
+          <div class="card-desc">Concerts de musique traditionnelle, ensembles de balafons, tam-tams et chants folkloriques. La richesse sonore du Cameroun à l'honneur.</div>
+          <span class="card-tag" style="background:rgba(0,154,68,.15);color:var(--vert);">Scène Principale</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="culture">
+        <div class="card-top" style="background:linear-gradient(135deg,#1a0d00,#2d1500)">
+          <div class="card-bg-pattern" style="background:linear-gradient(45deg,rgba(254,203,0,.08) 25%,transparent 25%) 0/10px 10px;"></div>
+          <div class="card-icon-wrap">🍽️</div>
+          <div class="card-overlay"><span class="card-overlay-text">Goûter →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-jaune">Culture</div>
+          <div class="card-title">Gastronomie Régionale</div>
+          <div class="card-desc">Village gastronomique avec les plats emblématiques de chaque région : ndolé, eru, kpwem, poulet DG, couscous… Un festin panafricain!</div>
+          <span class="card-tag" style="background:rgba(254,203,0,.15);color:var(--jaune);">Village Gourmet</span>
+        </div>
+      </div>
+
+      <!-- Art -->
+      <div class="activity-card" data-category="art">
+        <div class="card-top" style="background:linear-gradient(135deg,#1a001a,#2d002d)">
+          <div class="card-bg-pattern" style="background:linear-gradient(60deg,rgba(255,0,200,.1) 0%,transparent 50%);"></div>
+          <div class="card-icon-wrap">🎨</div>
+          <div class="card-overlay"><span class="card-overlay-text">Créer →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-rouge">Art</div>
+          <div class="card-title">Exposition & Concours de Dessin</div>
+          <div class="card-desc">Les jeunes artistes expriment leur vision du Cameroun de demain. Peinture, sculpture, photographie et art numérique en compétition.</div>
+          <span class="card-tag" style="background:rgba(232,0,45,.15);color:var(--rouge);">Galerie Jeunesse</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="art">
+        <div class="card-top" style="background:linear-gradient(135deg,#001500,#002200)">
+          <div class="card-bg-pattern" style="background:repeating-conic-gradient(rgba(0,154,68,.1) 0deg 10deg,transparent 10deg 20deg) 0/40px 40px;"></div>
+          <div class="card-icon-wrap">💃</div>
+          <div class="card-overlay"><span class="card-overlay-text">Danser →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-vert">Art</div>
+          <div class="card-title">Concours de Danse</div>
+          <div class="card-desc">Afrobeat, bikutsi, makossa, hip-hop camerounais. Les meilleurs danseurs s'affrontent sur scène devant un jury et un public enflammé.</div>
+          <span class="card-tag" style="background:rgba(0,154,68,.15);color:var(--vert);">Grande Scène</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="art">
+        <div class="card-top" style="background:linear-gradient(135deg,#181000,#2a1c00)">
+          <div class="card-bg-pattern" style="background:repeating-linear-gradient(-45deg,rgba(254,203,0,.08) 0,rgba(254,203,0,.08) 1px,transparent 0,transparent 8px);"></div>
+          <div class="card-icon-wrap">🎤</div>
+          <div class="card-overlay"><span class="card-overlay-text">Chanter →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-jaune">Art</div>
+          <div class="card-title">Slam & Poésie</div>
+          <div class="card-desc">Les jeunes poètes prennent la parole. Slam, spoken word et joutes poétiques sur des thèmes d'actualité, d'identité et d'avenir.</div>
+          <span class="card-tag" style="background:rgba(254,203,0,.15);color:var(--jaune);">Amphithéâtre</span>
+        </div>
+      </div>
+
+      <!-- Éducation -->
+      <div class="activity-card" data-category="education">
+        <div class="card-top" style="background:linear-gradient(135deg,#00101a,#001a2a)">
+          <div class="card-bg-pattern" style="background:linear-gradient(0deg,rgba(0,80,200,.15) 0%,transparent 70%);"></div>
+          <div class="card-icon-wrap">🏆</div>
+          <div class="card-overlay"><span class="card-overlay-text">Concourir →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-rouge">Éducation</div>
+          <div class="card-title">Olympiades Scolaires</div>
+          <div class="card-desc">Compétitions de mathématiques, sciences, langues et lettres. Les meilleurs élèves du pays s'affrontent pour décrocher les lauriers de l'excellence.</div>
+          <span class="card-tag" style="background:rgba(232,0,45,.15);color:var(--rouge);">Salle des Concours</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="education">
+        <div class="card-top" style="background:linear-gradient(135deg,#001100,#002200)">
+          <div class="card-bg-pattern" style="background:radial-gradient(circle,rgba(0,154,68,.15) 1px,transparent 1px) 0/20px 20px;"></div>
+          <div class="card-icon-wrap">💡</div>
+          <div class="card-overlay"><span class="card-overlay-text">Innover →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-vert">Éducation</div>
+          <div class="card-title">Concours d'Innovation</div>
+          <div class="card-desc">Start-ups jeunes, prototypes technologiques et projets environnementaux. Les inventeurs de demain présentent leurs solutions aux défis locaux.</div>
+          <span class="card-tag" style="background:rgba(0,154,68,.15);color:var(--vert);">Espace Tech</span>
+        </div>
+      </div>
+
+      <!-- Social -->
+      <div class="activity-card" data-category="social">
+        <div class="card-top" style="background:linear-gradient(135deg,#1a1000,#2d1a00)">
+          <div class="card-bg-pattern" style="background:linear-gradient(135deg,rgba(254,203,0,.08) 25%,transparent 25%,transparent 75%,rgba(254,203,0,.08) 75%) 0/20px 20px;"></div>
+          <div class="card-icon-wrap">🤝</div>
+          <div class="card-overlay"><span class="card-overlay-text">Rejoindre →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-jaune">Social</div>
+          <div class="card-title">Forum des Jeunes Leaders</div>
+          <div class="card-desc">Débats, conférences et ateliers sur l'engagement civique, le leadership, l'entrepreneuriat et le développement durable. La parole aux jeunes !</div>
+          <span class="card-tag" style="background:rgba(254,203,0,.15);color:var(--jaune);">Centre de Conférences</span>
+        </div>
+      </div>
+
+      <div class="activity-card" data-category="social">
+        <div class="card-top" style="background:linear-gradient(135deg,#0a1a00,#142a00)">
+          <div class="card-bg-pattern" style="background:repeating-linear-gradient(0deg,rgba(0,154,68,.1) 0,rgba(0,154,68,.1) 1px,transparent 0,transparent 15px);"></div>
+          <div class="card-icon-wrap">🌱</div>
+          <div class="card-overlay"><span class="card-overlay-text">Agir →</span></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category text-vert">Social</div>
+          <div class="card-title">Opération Environnement</div>
+          <div class="card-desc">Plantation d'arbres, nettoyage collectif, sensibilisation écologique. Les jeunes prennent soin de leur environnement et de leur territoire.</div>
+          <span class="card-tag" style="background:rgba(0,154,68,.15);color:var(--vert);">Espace Vert</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROGRAMME -->
+  <section id="programme">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Déroulement de la journée</div>
+      <h2 class="section-title">Le <em>Programme</em></h2>
+    </div>
+    <div class="timeline reveal">
+
+      <div class="timeline-item">
+        <div class="tl-time">6h00</div>
+        <div class="tl-dot rouge"></div>
+        <div class="tl-content">
+          <h4>🌅 Lever du Drapeau & Hymne National</h4>
+          <p>Cérémonie officielle d'ouverture avec levée des couleurs, hymne national et allocution des autorités locales.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-time">7h30</div>
+        <div class="tl-dot vert"></div>
+        <div class="tl-content">
+          <h4>🏃 Départ du Cross Populaire</h4>
+          <p>Course de fond ouverte à tous les jeunes à travers la ville. Un moment de cohésion sportive incontournable.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-time">9h00</div>
+        <div class="tl-dot jaune"></div>
+        <div class="tl-content">
+          <h4>🎭 Grand Défilé Culturel</h4>
+          <p>Les délégations régionales défilent en tenues traditionnelles sous les acclamations de la foule.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-time">11h00</div>
+        <div class="tl-dot rouge"></div>
+        <div class="tl-content">
+          <h4>⚽ Ouverture des Tournois Sportifs</h4>
+          <p>Coup d'envoi simultané des matchs de football, basketball, handball et des épreuves d'athlétisme.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-time">13h00</div>
+        <div class="tl-dot vert"></div>
+        <div class="tl-content">
+          <h4>🍽️ Pause Gastronomique</h4>
+          <p>Ouverture du village gastronomique. Découverte des saveurs de toutes les régions du Cameroun.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-time">15h00</div>
+        <div class="tl-dot jaune"></div>
+        <div class="tl-content">
+          <h4>🎤 Scène Artistique & Concours</h4>
+          <p>Slam, concours de danse, performances musicales. Le talent de la jeunesse s'exprime sans retenue.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-time">17h30</div>
+        <div class="tl-dot rouge"></div>
+        <div class="tl-content">
+          <h4>🏆 Cérémonie de Remise des Prix</h4>
+          <p>Récompenses pour tous les lauréats : sport, culture, excellence scolaire et innovation.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-time">19h00</div>
+        <div class="tl-dot vert"></div>
+        <div class="tl-content">
+          <h4>🎆 Concert de Clôture & Feu d'Artifice</h4>
+          <p>Grande soirée musicale avec des artistes nationaux. La journée se termine en beauté sous les étoiles.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section id="galerie">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Moments forts</div>
+      <h2 class="section-title">La <em>Galerie</em></h2>
+    </div>
+    <div class="gallery-grid reveal" style="max-width:1200px;margin:0 auto;">
+      <div class="gallery-item">
+        <div class="gallery-bg" style="background:linear-gradient(135deg,#1a0000,#2d0010);font-size:8rem;">⚽</div>
+        <div class="gallery-caption">Tournoi de Football Inter-Lycées</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-bg" style="background:linear-gradient(135deg,#001a00,#002d10);font-size:5rem;">🎭</div>
+        <div class="gallery-caption">Défilé Culturel</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-bg" style="background:linear-gradient(135deg,#1a1300,#2d2200);font-size:5rem;">🥁</div>
+        <div class="gallery-caption">Musique Traditionnelle</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-bg" style="background:linear-gradient(135deg,#001a1a,#002d2d);font-size:5rem;">💃</div>
+        <div class="gallery-caption">Concours de Danse</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-bg" style="background:linear-gradient(135deg,#1a001a,#2d0020);font-size:5rem;">🎨</div>
+        <div class="gallery-caption">Exposition Artistique</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-bg" style="background:linear-gradient(135deg,#0a1a00,#152a00);font-size:5rem;">🏆</div>
+        <div class="gallery-caption">Remise des Trophées</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSCRIPTION -->
+  <section id="inscription">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Rejoignez la fête</div>
+      <h2 class="section-title"><em>Inscrivez-vous</em></h2>
+    </div>
+    <div class="form-wrap reveal">
+      <div id="form-main">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Prénom *</label>
+            <input type="text" id="f-prenom" placeholder="Votre prénom" />
+          </div>
+          <div class="form-group">
+            <label>Nom *</label>
+            <input type="text" id="f-nom" placeholder="Votre nom" />
+          </div>
+          <div class="form-group">
+            <label>Âge *</label>
+            <input type="number" id="f-age" placeholder="Votre âge" min="10" max="35" />
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="f-email" placeholder="votre@email.com" />
+          </div>
+          <div class="form-group">
+            <label>Région</label>
+            <select id="f-region">
+              <option value="">Sélectionner votre région</option>
+              <option>Adamaoua</option>
+              <option>Centre</option>
+              <option>Est</option>
+              <option>Extrême-Nord</option>
+              <option>Littoral</option>
+              <option>Nord</option>
+              <option>Nord-Ouest</option>
+              <option>Ouest</option>
+              <option>Sud</option>
+              <option>Sud-Ouest</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Activité souhaitée *</label>
+            <select id="f-activite">
+              <option value="">Choisir une activité</option>
+              <option>Tournoi de Football</option>
+              <option>Course & Athlétisme</option>
+              <option>Basketball & Handball</option>
+              <option>Défilé Culturel</option>
+              <option>Musique Traditionnelle</option>
+              <option>Concours de Dessin</option>
+              <option>Concours de Danse</option>
+              <option>Slam & Poésie</option>
+              <option>Olympiades Scolaires</option>
+              <option>Concours d'Innovation</option>
+              <option>Forum des Jeunes Leaders</option>
+              <option>Opération Environnement</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Message (optionnel)</label>
+            <textarea id="f-message" placeholder="Partagez votre motivation, vos attentes…"></textarea>
+          </div>
+        </div>
+        <button class="submit-btn" onclick="submitForm()">
+          <span>✊ Je Participe à la Fête !</span>
+        </button>
+        <p id="form-error" style="color:var(--rouge);font-size:.8rem;margin-top:.8rem;display:none;text-align:center;">
+          Veuillez remplir tous les champs obligatoires (*).
+        </p>
+      </div>
+
+      <div id="form-success">
+        <div class="success-icon">🎉</div>
+        <h3>Inscription confirmée !</h3>
+        <p id="success-msg">Bravo ! Vous êtes officiellement inscrit(e) à la Fête de la Jeunesse du 11 Février. À très bientôt !</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-flag">
+      <div class="flag-bar" style="background:var(--vert)"></div>
+      <div class="flag-bar" style="background:var(--rouge)"></div>
+      <div class="flag-bar" style="background:var(--jaune)"></div>
+    </div>
+    <div class="footer-logo">11 Février — Fête de la Jeunesse</div>
+    <p class="footer-copy">© 2026 · Ensemble, construisons l'avenir du Cameroun · 🇨🇲</p>
+  </footer>
+
+  <script>
+    // ── CURSOR ──
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a,button,.filter-btn,.activity-card,.gallery-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '30px'; cursor.style.height = '30px';
+        cursor.style.background = 'var(--rouge)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '14px'; cursor.style.height = '14px';
+        cursor.style.background = 'var(--jaune)';
+      });
+    });
+
+    // ── FLOATING DOTS ──
+    function createDot() {
+      const colors = ['var(--rouge)','var(--vert)','var(--jaune)'];
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      const size = Math.random() * 6 + 2;
+      dot.style.cssText = `
+        width:${size}px;height:${size}px;
+        background:${colors[Math.floor(Math.random()*3)]};
+        left:${Math.random()*100}%;
+        top:${100 + Math.random()*20}%;
+        opacity:${Math.random()*.3+.05};
+        animation-duration:${Math.random()*10+8}s;
+        animation-delay:${Math.random()*5}s;
+      `;
+      document.getElementById('hero').appendChild(dot);
+      setTimeout(() => dot.remove(), 18000);
+    }
+    setInterval(createDot, 600);
+    for(let i=0;i<15;i++) createDot();
+
+    // ── COUNTDOWN ──
+    function updateCountdown() {
+      const now = new Date();
+      const year = now.getFullYear();
+      let target = new Date(`${year}-02-11T06:00:00`);
+      if(now >= target) target = new Date(`${year+1}-02-11T06:00:00`);
+      const diff = target - now;
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins  = Math.floor((diff % 3600000)  / 60000);
+      const secs  = Math.floor((diff % 60000)     / 1000);
+      document.getElementById('cd-jours').textContent   = String(days).padStart(3,'0');
+      document.getElementById('cd-heures').textContent  = String(hours).padStart(2,'0');
+      document.getElementById('cd-minutes').textContent = String(mins).padStart(2,'0');
+      document.getElementById('cd-secondes').textContent= String(secs).padStart(2,'0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ── FILTER ──
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.activity-card').forEach((card, i) => {
+          const show = f === 'all' || card.dataset.category === f;
+          card.classList.toggle('hidden', !show);
+          if(show) { card.style.animationDelay = (i * .05) + 's'; }
+        });
+      });
+    });
+
+    // ── REVEAL ON SCROLL ──
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting) { e.target.classList.add('visible'); }
+      });
+    }, { threshold: .1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── FORM (connecté au backend PHP) ──
+    async function submitForm() {
+      const prenom   = document.getElementById('f-prenom').value.trim();
+      const nom      = document.getElementById('f-nom').value.trim();
+      const age      = document.getElementById('f-age').value;
+      const email    = document.getElementById('f-email').value.trim();
+      const region   = document.getElementById('f-region').value;
+      const activite = document.getElementById('f-activite').value;
+      const message  = document.getElementById('f-message').value;
+      const err      = document.getElementById('form-error');
+
+      // Validation locale
+      if(!prenom || !nom || !age || !email || !activite) {
+        err.textContent   = 'Veuillez remplir tous les champs obligatoires (*).';
+        err.style.display = 'block';
+        return;
+      }
+
+      // Désactiver le bouton pendant l'envoi
+      const btn = document.querySelector('.submit-btn');
+      btn.disabled = true;
+      btn.querySelector('span').textContent = '⏳ Envoi en cours…';
+
+      try {
+        const res  = await fetch('./api/inscription.php', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ prenom, nom, age, email, region, activite, message })
+        });
+        const data = await res.json();
+
+        if(data.success) {
+          err.style.display = 'none';
+          document.getElementById('form-main').style.display = 'none';
+          document.getElementById('success-msg').textContent =
+            `Bravo ${prenom} ! Vous êtes inscrit(e) pour « ${activite} ». Rendez-vous le 11 Février ! 🎊`;
+          document.getElementById('form-success').style.display = 'block';
+        } else {
+          err.textContent   = data.message;
+          err.style.display = 'block';
+          btn.disabled = false;
+          btn.querySelector('span').textContent = '✊ Je Participe à la Fête !';
+        }
+      } catch(e) {
+        err.textContent   = 'Erreur de connexion au serveur. Vérifiez que XAMPP est lancé.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.querySelector('span').textContent = '✊ Je Participe à la Fête !';
+      }
+    }
+
+    // ── NAVBAR active on scroll ──
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+      const scrollY = window.pageYOffset;
+      sections.forEach(sec => {
+        if(scrollY >= sec.offsetTop - 120) {
+          document.querySelectorAll('.nav-links a').forEach(a => {
+            a.style.color = '';
+          });
+          const active = document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+          if(active) active.style.color = 'var(--jaune)';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

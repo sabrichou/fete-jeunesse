@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Fête de la Jeunesse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --rouge:#E8002D; --vert:#009A44; --jaune:#FECB00;
+      --noir:#0A0A0A;  --blanc:#F5F0E8; --gris:#1A1A1A; --gris2:#111;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--gris2);color:var(--blanc);font-family:'Inter',sans-serif;min-height:100vh;}
+
+    /* ── LOGIN ── */
+    #login-screen {
+      min-height:100vh;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(254,203,0,.07),transparent);
+    }
+    .login-box {
+      background:var(--gris);border:1px solid rgba(254,203,0,.2);
+      padding:3rem;width:100%;max-width:400px;text-align:center;
+    }
+    .login-box h1{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--jaune);margin-bottom:.3rem;}
+    .login-box p{color:rgba(245,240,232,.4);font-size:.85rem;margin-bottom:2rem;}
+    .login-box input{
+      width:100%;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.1);color:var(--blanc);
+      padding:.85rem 1rem;font-family:'Inter',sans-serif;font-size:.9rem;
+      margin-bottom:1rem;outline:none;transition:border-color .25s;
+    }
+    .login-box input:focus{border-color:var(--jaune);}
+    .login-btn{
+      width:100%;padding:1rem;background:var(--rouge);color:#fff;border:none;
+      font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;
+      letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.25s;
+    }
+    .login-btn:hover{background:#c0001f;}
+    #login-error{color:var(--rouge);font-size:.8rem;margin-top:.8rem;}
+
+    /* ── ADMIN LAYOUT ── */
+    #admin-screen{display:none;}
+    .admin-header{
+      background:rgba(10,10,10,.95);backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(254,203,0,.12);
+      padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:50;
+    }
+    .admin-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--jaune);}
+    .admin-logo span{color:var(--rouge);}
+    .logout-btn{
+      background:transparent;border:1px solid rgba(245,240,232,.2);color:rgba(245,240,232,.5);
+      padding:.4rem 1rem;font-size:.75rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+      transition:.2s;
+    }
+    .logout-btn:hover{border-color:var(--rouge);color:var(--rouge);}
+
+    .admin-body{padding:2rem;max-width:1400px;margin:0 auto;}
+
+    /* ── STATS CARDS ── */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:2rem;}
+    .stat-card{
+      background:var(--gris);border:1px solid rgba(255,255,255,.05);
+      padding:1.5rem;position:relative;overflow:hidden;
+    }
+    .stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+    .stat-card:nth-child(1)::before{background:var(--jaune);}
+    .stat-card:nth-child(2)::before{background:var(--vert);}
+    .stat-card:nth-child(3)::before{background:var(--rouge);}
+    .stat-card:nth-child(4)::before{background:#888;}
+    .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;line-height:1;}
+    .stat-label{font-size:.7rem;color:rgba(245,240,232,.4);letter-spacing:1px;text-transform:uppercase;margin-top:.3rem;}
+
+    /* ── TOOLBAR ── */
+    .toolbar{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:center;}
+    .toolbar input, .toolbar select{
+      background:var(--gris);border:1px solid rgba(255,255,255,.1);
+      color:var(--blanc);padding:.6rem 1rem;font-family:'Inter',sans-serif;font-size:.85rem;
+      outline:none;flex:1;min-width:150px;
+    }
+    .toolbar input:focus,.toolbar select:focus{border-color:var(--jaune);}
+    .export-btn{
+      padding:.6rem 1.4rem;background:var(--vert);color:#fff;border:none;
+      font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;
+      letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;
+    }
+    .refresh-btn{
+      padding:.6rem 1.4rem;background:transparent;color:var(--jaune);
+      border:1px solid var(--jaune);font-family:'Syne',sans-serif;font-size:.8rem;
+      font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+    }
+
+    /* ── TABLE ── */
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:.82rem;}
+    thead th{
+      background:rgba(254,203,0,.08);color:rgba(245,240,232,.5);
+      font-size:.7rem;letter-spacing:2px;text-transform:uppercase;
+      padding:.8rem 1rem;text-align:left;white-space:nowrap;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .2s;}
+    tbody tr:hover{background:rgba(255,255,255,.03);}
+    tbody td{padding:.75rem 1rem;color:rgba(245,240,232,.8);}
+
+    .badge{
+      display:inline-block;padding:.2rem .7rem;font-size:.65rem;
+      font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;
+    }
+    .badge-confirmé{background:rgba(0,154,68,.2);color:var(--vert);}
+    .badge-en_attente{background:rgba(254,203,0,.15);color:var(--jaune);}
+    .badge-annulé{background:rgba(232,0,45,.2);color:var(--rouge);}
+
+    .action-btn{
+      background:transparent;border:none;color:rgba(245,240,232,.3);
+      font-size:.75rem;cursor:pointer;padding:.2rem .5rem;transition:.2s;
+    }
+    .action-btn:hover{color:var(--rouge);}
+    .confirm-btn{color:var(--vert) !important;}
+    .confirm-btn:hover{color:var(--vert) !important;opacity:.7;}
+
+    /* Pagination */
+    .pagination{display:flex;gap:.5rem;justify-content:center;margin-top:1.5rem;}
+    .page-btn{
+      width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+      background:var(--gris);border:1px solid rgba(255,255,255,.07);
+      color:rgba(245,240,232,.5);font-size:.8rem;cursor:pointer;transition:.2s;
+    }
+    .page-btn.active,.page-btn:hover{background:var(--jaune);color:var(--noir);border-color:var(--jaune);font-weight:700;}
+
+    /* Toast */
+    #toast{
+      position:fixed;bottom:2rem;right:2rem;z-index:999;
+      background:var(--vert);color:#fff;padding:1rem 1.5rem;
+      font-size:.85rem;font-weight:600;transform:translateY(100px);opacity:0;
+      transition:.3s;
+    }
+    #toast.show{transform:none;opacity:1;}
+    #toast.error{background:var(--rouge);}
+
+    /* Loading */
+    .loading{text-align:center;padding:3rem;color:rgba(245,240,232,.3);font-size:.9rem;}
+
+    @media(max-width:600px){
+      .admin-body{padding:1rem;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>11 <span style="color:var(--rouge)">Fév</span></h1>
+    <p>Panneau Administrateur — Fête de la Jeunesse</p>
+    <input type="text"     id="l-user" placeholder="Identifiant" autocomplete="username"/>
+    <input type="password" id="l-pass" placeholder="Mot de passe" autocomplete="current-password"/>
+    <button class="login-btn" onclick="login()">Se connecter</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- ── ADMIN ── -->
+<div id="admin-screen">
+  <header class="admin-header">
+    <div class="admin-logo">Admin — <span>11 Février</span></div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="admin-user" style="font-size:.8rem;color:rgba(245,240,232,.4);"></span>
+      <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <div class="admin-body">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="s-total">—</div>
+        <div class="stat-label">Total inscrits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="s-confirme">—</div>
+        <div class="stat-label">Confirmés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="s-attente">—</div>
+        <div class="stat-label">En attente</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="s-annule">—</div>
+        <div class="stat-label">Annulés</div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input type="text" id="f-search"   placeholder="🔍 Rechercher nom, email…" oninput="debouncedLoad()"/>
+      <select id="f-region" onchange="loadInscriptions()">
+        <option value="">Toutes les régions</option>
+        <option>Adamaoua</option><option>Centre</option><option>Est</option>
+        <option>Extrême-Nord</option><option>Littoral</option><option>Nord</option>
+        <option>Nord-Ouest</option><option>Ouest</option><option>Sud</option><option>Sud-Ouest</option>
+      </select>
+      <select id="f-statut" onchange="loadInscriptions()">
+        <option value="">Tous les statuts</option>
+        <option value="confirmé">Confirmé</option>
+        <option value="en_attente">En attente</option>
+        <option value="annulé">Annulé</option>
+      </select>
+      <button class="refresh-btn" onclick="loadInscriptions()">↺ Actualiser</button>
+      <button class="export-btn"  onclick="exportCSV()">⬇ Exporter CSV</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Prénom & Nom</th><th>Âge</th><th>Email</th>
+            <th>Région</th><th>Activité</th><th>Statut</th><th>Date</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="9" class="loading">Chargement…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────
+const API_BASE = '/fete-jeunesse/api';
+let TOKEN = 'JEUNESSE_ADMIN_2026_SECRET';
+let currentPage = 1;
+let debounceTimer;
+
+// ── LOGIN ────────────────────────────────────────────────────────
+async function login() {
+  const username = document.getElementById('l-user').value.trim();
+  const password = document.getElementById('l-pass').value;
+  const errEl    = document.getElementById('login-error');
+
+  if (!username || !password) { errEl.textContent = 'Veuillez remplir les deux champs.'; return; }
+
+  try {
+    const res  = await fetch(`${API_BASE}/auth.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      TOKEN = data.token;
+      document.getElementById('admin-user').textContent = '👤 ' + data.username;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      loadInscriptions();
+    } else {
+      errEl.textContent = data.message;
+    }
+  } catch(e) {
+    errEl.textContent = 'Erreur de connexion au serveur.';
+  }
+}
+
+function logout() {
+  TOKEN = '';
+  document.getElementById('admin-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('l-pass').value = '';
+}
+
+// ── CHARGER INSCRIPTIONS ─────────────────────────────────────────
+async function loadInscriptions(page = currentPage) {
+  currentPage = page;
+  const search  = document.getElementById('f-search').value;
+  const region  = document.getElementById('f-region').value;
+  const statut  = document.getElementById('f-statut').value;
+
+  const params = new URLSearchParams({ page, search, region, statut });
+
+  try {
+    const res  = await fetch(`${API_BASE}/inscription.php?${params}`, {
+      headers: { 'Authorization': `Bearer ${TOKEN}` }
+    });
+    const data = await res.json();
+
+    if (!data.success) { showToast(data.message, true); return; }
+
+    renderStats(data.stats);
+    renderTable(data.inscriptions);
+    renderPagination(data.pagination);
+  } catch(e) {
+    showToast('Erreur lors du chargement.', true);
+  }
+}
+
+// ── RENDU STATS ──────────────────────────────────────────────────
+function renderStats(stats) {
+  document.getElementById('s-total').textContent    = stats.total ?? 0;
+  document.getElementById('s-confirme').textContent = stats.par_statut?.['confirmé']    ?? 0;
+  document.getElementById('s-attente').textContent  = stats.par_statut?.['en_attente']  ?? 0;
+  document.getElementById('s-annule').textContent   = stats.par_statut?.['annulé']      ?? 0;
+}
+
+// ── RENDU TABLE ──────────────────────────────────────────────────
+function renderTable(rows) {
+  const tbody = document.getElementById('tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="loading">Aucune inscription trouvée.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td style="color:rgba(245,240,232,.3)">#${r.id}</td>
+      <td><strong>${r.prenom} ${r.nom}</strong></td>
+      <td>${r.age}</td>
+      <td style="font-size:.75rem">${r.email}</td>
+      <td>${r.region}</td>
+      <td>${r.activite}</td>
+      <td><span class="badge badge-${r.statut}">${r.statut}</span></td>
+      <td style="font-size:.72rem;color:rgba(245,240,232,.4)">${formatDate(r.created_at)}</td>
+      <td>
+        <button class="action-btn confirm-btn" title="Confirmer" onclick="changerStatut(${r.id},'confirmé')">✓</button>
+        <button class="action-btn" title="Mettre en attente" onclick="changerStatut(${r.id},'en_attente')">⏸</button>
+        <button class="action-btn" title="Annuler" onclick="changerStatut(${r.id},'annulé')">✕</button>
+        <button class="action-btn" title="Supprimer" onclick="supprimer(${r.id})">🗑</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── PAGINATION ───────────────────────────────────────────────────
+function renderPagination({ page, pages }) {
+  const el = document.getElementById('pagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  let html = '';
+  for (let i = 1; i <= pages; i++) {
+    html += `<div class="page-btn ${i===page?'active':''}" onclick="loadInscriptions(${i})">${i}</div>`;
+  }
+  el.innerHTML = html;
+}
+
+// ── ACTIONS ──────────────────────────────────────────────────────
+async function changerStatut(id, statut) {
+  const res  = await fetch(`${API_BASE}/inscription.php`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` },
+    body: JSON.stringify({ id, statut })
+  });
+  const data = await res.json();
+  showToast(data.message, !data.success);
+  if (data.success) loadInscriptions();
+}
+
+async function supprimer(id) {
+  if (!confirm('Supprimer définitivement cette inscription ?')) return;
+  const res  = await fetch(`${API_BASE}/inscription.php`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` },
+    body: JSON.stringify({ id })
+  });
+  const data = await res.json();
+  showToast(data.message, !data.success);
+  if (data.success) loadInscriptions();
+}
+
+// ── EXPORT CSV ───────────────────────────────────────────────────
+async function exportCSV() {
+  const res  = await fetch(`${API_BASE}/inscription.php?limit=9999`, {
+    headers: { 'Authorization': `Bearer ${TOKEN}` }
+  });
+  const data = await res.json();
+  if (!data.success || !data.inscriptions.length) { showToast('Aucune donnée à exporter.', true); return; }
+
+  const cols = ['id','prenom','nom','age','email','region','activite','statut','created_at'];
+  const csv  = [
+    cols.join(';'),
+    ...data.inscriptions.map(r => cols.map(c => `"${r[c] ?? ''}"`).join(';'))
+  ].join('\n');
+
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `inscriptions_11fevrier_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ── HELPERS ──────────────────────────────────────────────────────
+function formatDate(dt) {
+  return new Date(dt).toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'show' + (isError ? ' error' : '');
+  setTimeout(() => t.className = '', 3000);
+}
+
+function debouncedLoad() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => loadInscriptions(1), 400);
+}
+
+// Connexion avec Entrée
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') login();
+});
+</script>
+</body>
+</html>
